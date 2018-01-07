@@ -1,0 +1,22 @@
+﻿@model IEnumerable<OrderCreationForm.Models.Supplier>
+<table class="table">
+@foreach (var item in Model) {
+    <tr>
+        <td>
+          <strong>Address:</strong> @Html.DisplayFor(modelItem => item.SupplierAddress) , 
+            <strong>Phone:</strong> @Html.DisplayFor(modelItem => item.SupplierPhoneNo)
+        </td>
+    </tr>
+    <tr>
+        <td>
+         <strong>Company Email:</strong> @Html.DisplayFor(modelItem => item.SupplierEmail)
+        </td>
+    </tr>
+    <tr>
+        <td>
+          <strong>Contact Person:</strong> @Html.DisplayFor(modelItem => item.SupplierContactPerson) , 
+            <strong>Mobile:</strong> @Html.DisplayFor(modelItem => item.SupplierContactPersonPhoneNo)
+        </td>
+    </tr>
+}
+</table>

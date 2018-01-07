@@ -1,0 +1,34 @@
+﻿@{
+    ViewBag.Title = "CartSummaryList";
+}
+<script src="~/Scripts/bootstrap.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/jquery-3.1.1.js"></script>
+<script src="~/Scripts/jquery-3.1.1.min.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+<script type="text/javascript">
+    $(function () {
+        alert("jQuery Executed");
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: "@(Url.RouteUrl("GetAllPassiveCartsId"))",
+            success: function (data) {
+                for (i = 0; i < data.length; i++)
+                {
+                    $("#cart"+(i+1)).load('@(Url.Action("GetCartItems", "Cart",null, Request.Url.Scheme))?cartId=' + data[i]);
+                }
+            },
+            error: function () {
+                alert('Error. Please try again.');
+            }
+        });//EndOf Ajax
+    });
+</script>
+<h4>Cart Summary List</h4>
+
+<div id="cart1"></div>
+<div id="cart2"></div>
+<div id="cart3"></div>
+
+

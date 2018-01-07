@@ -1,0 +1,98 @@
+﻿@model OrderCreationForm.Models.Cart
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Cart</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CartId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CartId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Quantity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Quantity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.SubTotal)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.SubTotal)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateCreated)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateCreated)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CartType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CartType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GroupNum)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GroupNum)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsComplete)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsComplete)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsActive)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsActive)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Employee.EmployeeFname)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Employee.EmployeeFname)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Product.ProductDesc)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Product.ProductDesc)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.RecordId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,274 @@
+﻿@model PagedList.IPagedList<OrderCreationForm.Models.Product>
+@using PagedList.Mvc;
+
+<script src="~/Scripts/jquery-3.1.1.min.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+@*<script>
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>*@
+<script type="text/javascript">
+    $(function () {
+
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
+        $('.AddLink').on('click', function (e) {
+            e.preventDefault();
+            var cartItems = new Array();
+            var productId = $(this).attr("data-id");
+            var unitPrice = $(this).attr("data-unitprice");
+            cartItems.push({
+                ProductId: productId,
+                UnitPrice: unitPrice
+            });
+            var data =
+                {
+                    CartElements: cartItems
+                }
+            $.ajax({
+                url: "@(Url.RouteUrl("AddToCart"))",
+                    type:'POST',
+                    data: JSON.stringify(data),
+                    dataType: 'JSON',
+                    contentType: "application/json",
+                    success: function (d) {
+                            if (d.status == 1) {
+                                $('#successAlertModal').modal('show');
+                            }
+                            else if (d.status == 2)
+                            {
+                                $('#ExceedLimitAlertModal').modal('show');
+                            }
+                            else if (d.status == 3) {
+                                $('#ExistenceAlertModal').modal('show');
+                            }
+                            else if (d.status == 4) {
+                                $('#InternalAlertModal').modal('show');
+                            }
+                            else if (d.status == 5) {
+                                $('#Restricition1AlertModal').modal('show');
+                            }
+                            else if (d.status == 6) {
+                                $('#Restricition2AlertModal').modal('show');
+                            }
+                            else {
+                                $('#failureAlertModal').modal('show');
+                            }
+                        },
+                        error: function () {
+                            alert('Error. Please try again.');
+                        }
+                });//EndOf Ajax
+        });//EndOf .AddLink Func
+
+        $('.SupplierLink').on('click', function (e) {
+            var ProductId = $(this).attr("data-id");
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.RouteUrl("GetSupplierInfoByProductId"))",
+                data: { "ProductId": ProductId },
+                        success: function (data) {
+                            $('#supplierDetailsModal').find('.ajax-dynamic-get-data-form').html(data);
+                            $('#supplierDetailsModal').modal('show');
+                        },
+                        error: function () {
+                            alert('Error. Please try again.');
+                        }
+                });//EndOf Ajax
+        })
+    });//EndOf Main Func
+</script>
+
+<!-- Button trigger modal -->
+<div class="modal fade" id="successAlertModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div style="width:800px; margin:0 auto;" aria-hidden="true" class="alert alert-dismissable alert-success">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <strong>An item was added to your cart!</strong>
+    </div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Confirm check out.</h4>
+            </div>
+            <div class="modal-body">
+                <p>Would you like to check out or continue??</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Continue</button>
+                <button type="button" id="checkout" class="btn btn-primary" onclick="window.location.href='@Url.Action("MyCart", "Carts")';">Check Out</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Button trigger modal -->
+<div class="modal fade" id="ExceedLimitAlertModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div style="width:800px; margin:0 auto;" aria-hidden="true" class="alert alert-dismissable alert-danger">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <strong>Cart limit exceeded! Not more than (3) three carts are permitted for external suppliers.</strong>
+    </div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Confirm check out.</h4>
+            </div>
+            <div class="modal-body">
+                <p>Would you like to check out or continue??</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Continue</button>
+                <button type="button" id="checkout" class="btn btn-primary" onclick="window.location.href='@Url.Action("CartList", "Carts")';">Check Out</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Button trigger modal -->
+<div class="modal fade" id="InternalAlertModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div style="width:800px; margin:0 auto;" aria-hidden="true" class="alert alert-dismissable alert-danger">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <strong>Cart limit exceeded! Only (1) one cart is permitted for internal suppliers.</strong>
+    </div>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Confirm check out.</h4>
+            </div>
+            <div class="modal-body">
+                <p>Would you like to check out or continue??</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Continue</button>
+                <button type="button" id="checkout" class="btn btn-primary" onclick="window.location.href='@Url.Action("CartList", "Carts")';">Check Out</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Button trigger modal -->
+<div class="modal fade" id="failureAlertModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div style="width:800px; margin:0 auto;" aria-hidden="true" class="alert alert-dismissable alert-danger">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <strong>Oops!</strong> Please ensure the <strong>selected supplier</strong> matches the one in <strong>cart</strong>.
+    </div>
+</div>
+
+<!-- Button trigger modal -->
+<div class="modal fade" id="ExistenceAlertModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div style="width:800px; margin:0 auto;" aria-hidden="true" class="alert alert-dismissable alert-danger">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <strong>Oops!</strong> Cart for supplier <strong>already exists</strong>!
+    </div>
+</div>
+
+<!-- Button trigger modal -->
+<div class="modal fade" id="Restricition1AlertModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div style="width:800px; margin:0 auto;" aria-hidden="true" class="alert alert-dismissable alert-danger">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <strong>Oops! Only external suppliers are permitted for this transaction.</strong>
+    </div>
+</div>
+
+<!-- Button trigger modal -->
+<div class="modal fade" id="Restricition2AlertModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div style="width:800px; margin:0 auto;" aria-hidden="true" class="alert alert-dismissable alert-danger">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <strong>Oops! Only internal suppliers are permitted for this transaction.</strong>
+    </div>
+</div>
+
+<!-- Button trigger modal -->
+<div class="modal fade" id="supplierDetailsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Supplier Info</h4>
+            </div>
+            <div class="modal-body">
+                <div class="ajax-dynamic-get-data-form" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="panel panel-default">
+    <div class="panel-body">
+        <table class="table">
+            <thead>
+                <tr class="success">
+                    <th>
+                        Product ID
+                    </th>
+                    <th>
+                        Description
+                    </th>
+                    <th>
+                        Price
+                    </th>
+                    <th>
+                        Category
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count() == 0)
+            {
+                    <tr>
+                        <td colspan="7">No results Found</td>
+                    </tr>
+                }
+                @foreach (var item in Model)
+            {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProductId)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProductDesc)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProductPrice)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProductCategory.ProductCatDesc)
+                        </td>
+                        <td>
+                            <a href="#" class="SupplierLink"
+                               data-id="@item.ProductId"
+                               data-toggle="tooltip" title="Supplier Info">
+                                <span class='glyphicon glyphicon-info-sign'> </span>
+                            </a> |
+                            <a href="#" class="AddLink"
+                               data-id="@item.ProductId" data-unitprice="@item.ProductPrice"
+                               data-toggle="tooltip" title="Add To Cart">
+                                <span class='glyphicon glyphicon-shopping-cart'> </span>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <br />
+        <div id='Paging' style="text-align: center">
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)
+            of @Model.PageCount
+            @Html.PagedListPager(Model, page => Url.Action("GetProductsBySupplierId",
+            new { supplierId = ViewBag.SupplierId, page }),
+            PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "productpartialview" }))
+        </div>
+    </div>
+</div>
+

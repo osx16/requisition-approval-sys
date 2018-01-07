@@ -1,0 +1,27 @@
+﻿@model IEnumerable<OrderCreationForm.Models.Record>
+
+<table class="table table-bordered">
+    <tr>
+        <th class="col-md-4">
+            @*@Html.DisplayNameFor(model => model.Quote)*@
+            Documents
+        </th>
+
+        <th class="col-md-2"></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.record_id)
+            </td>
+
+            <td>
+                @Html.ActionLink("View File", "DownloadFile", new { id = item.record_id })
+
+            </td>
+        </tr>
+    }
+
+</table> 

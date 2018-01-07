@@ -1,0 +1,86 @@
+﻿@model OrderCreationForm.Models.PagedLister<OrderCreationForm.Models.Cart>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "MyCart";
+}
+<h3>My Cart</h3>
+@section scripts{
+    @Scripts.Render("~/scripts/appjs/item.js")
+}
+<script src="~/Scripts/bootstrap.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/jquery-3.1.1.js"></script>
+<script src="~/Scripts/jquery-3.1.1.min.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+<script type="text/javascript">
+    $(function ()
+    {
+        //alert("jQuery Executed");
+        $.ajaxPrefilter(function (options, original_Options, jqXHR) {
+            options.async = true;
+        });
+
+        $("#fileupload").load('@Url.Action("RenderFileUploadView", "Carts")');
+    });
+</script>
+
+
+<div class="well">
+    @using (Html.BeginForm("mycart", "carts", FormMethod.Get))
+    {
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title"><b>Cart</b> <span class="badge"><b>@ViewBag.GroupNo</b></span> </h3> 
+                <p><b>Date Created:</b> @ViewBag.DateCreated</p>
+                <p><b>Supplier:</b> @ViewBag.Supplier</p>
+            </div>
+            <div class="panel-body">
+                <div style="margin-top:17px;">
+                    @{
+                        var grid = new WebGrid(
+                                    canPage: true,
+                                    rowsPerPage: Model.PageSize,
+                                    canSort: true,
+                                    ajaxUpdateContainerId: "grid");
+
+                        grid.Bind(Model.Content, rowCount: Model.TotalRecords, autoSortAndPage: false);
+                        grid.Pager(WebGridPagerModes.All);
+
+                        @grid.GetHtml(htmlAttributes: new { id = "grid" },   // id for ajaxUpdateContainerId parameter
+                fillEmptyRows: false,
+                tableStyle: "table table-bordered",
+                mode: WebGridPagerModes.All,
+                columns: grid.Columns(
+                  grid.Column("ProductId", "ID", canSort: false),
+                  grid.Column("Product.ProductDesc", "Item", style: "col-lg-4", canSort: false),
+                  grid.Column("Product.ProductPrice", "Unit Price", canSort: false),
+                  grid.Column("Quantity", "Quantity", style: "col-lg-3", canSort: false),
+                  grid.Column("SubTotal", "Sub Total", canSort: false, format: @<text>@String.Format("{0:C}", item.SubTotal) </text>),
+                  grid.Column(header: "Action", canSort: false, style: "action",
+                    format: @<text>
+                    @Html.Raw("<a data-modal='' href='/items/getsupplierinfobyproductid/" + item.ProductId + "' id='" + item.ProductId + "' title='Detail'> <span class='glyphicon glyphicon-info-sign'> </span> </a>")
+                    @Html.Raw("<a data-modal='' href='/carts/edit/" + item.ProductId + "' id='" + item.ProductId + "' title='Edit'> <span class='glyphicon glyphicon-edit'> </span> </a>")
+                    @Html.Raw("<a data-modal='' href='/carts/delete/" + item.ProductId + "' id='" + item.ProductId + "' title='Delete'> <span class='glyphicon glyphicon-trash'> </span> </a>")
+                    </text>)
+                ));
+                    }
+                    <div class="panel panel-default">
+                        <div class="panel-body"><span class="label label-info" style="font-size:medium">Total: </span><b>@String.Format("{0:C}", @ViewBag.CartTotal)</b></div>
+                    </div>
+                    <div class="panel panel-default" >
+                        <div class="panel-body" id="fileupload"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+     }
+</div>
+
+<!-- modal placeholder-->
+<div id='myModal' class='modal fade in'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>

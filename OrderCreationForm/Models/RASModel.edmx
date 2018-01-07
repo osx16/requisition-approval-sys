@@ -1,0 +1,983 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="RASModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ApprovalStatusType">
+          <Key>
+            <PropertyRef Name="ApprovalStatusId" />
+          </Key>
+          <Property Name="ApprovalStatusId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ApprovalStatus" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Cart">
+          <Key>
+            <PropertyRef Name="RecordId" />
+          </Key>
+          <Property Name="RecordId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CartId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ProductId" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="SubTotal" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="DateCreated" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CartProperties">
+          <Key>
+            <PropertyRef Name="CartId" />
+          </Key>
+          <Property Name="CartId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="EmployeeId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="CartType" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="GroupNum" Type="int" Nullable="false" />
+          <Property Name="IsComplete" Type="bit" Nullable="false" />
+          <Property Name="IsActive" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="DepartmentId" />
+          </Key>
+          <Property Name="DepartmentId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DivisionId" Type="int" Nullable="false" />
+          <Property Name="DepartmentName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="DepartmentAddress" Type="varchar" MaxLength="500" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Division">
+          <Key>
+            <PropertyRef Name="DivisionId" />
+          </Key>
+          <Property Name="DivisionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DivisionName" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EmployeeId" />
+          </Key>
+          <Property Name="EmployeeId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="EmployeeFname" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="EmployeeLname" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="EmployeeStatusId" Type="int" Nullable="false" />
+          <Property Name="DepartmentId" Type="int" Nullable="false" />
+          <Property Name="EmpDateCreated" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EmployeeStatusType">
+          <Key>
+            <PropertyRef Name="EmployeeStatusId" />
+          </Key>
+          <Property Name="EmployeeStatusId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmployeeStatus" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderDetails">
+          <Key>
+            <PropertyRef Name="OrderDetailsNo" />
+          </Key>
+          <Property Name="OrderDetailsNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CartId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="GrandTotal" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="RequisitionNo" Type="int" Nullable="false" />
+          <Property Name="DocGUID" Type="uniqueidentifier" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="QuotationFile" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="OrderLimitPerDept">
+          <Key>
+            <PropertyRef Name="DepartmentId" />
+          </Key>
+          <Property Name="DepartmentId" Type="int" Nullable="false" />
+          <Property Name="Personnel" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="TotalFigures" Type="int" Nullable="false" />
+          <Property Name="FirstFigure" Type="int" Nullable="false" />
+          <Property Name="SecondFigure" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="ProductId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductDesc" Type="varchar" MaxLength="500" Nullable="false" />
+          <Property Name="ProductCatId" Type="int" Nullable="false" />
+          <Property Name="ProductPrice" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="SupplierId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProductCategory">
+          <Key>
+            <PropertyRef Name="ProductCatId" />
+          </Key>
+          <Property Name="ProductCatId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductCatDesc" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Requisition">
+          <Key>
+            <PropertyRef Name="RecordId" />
+          </Key>
+          <Property Name="RecordId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RequsitionNo" Type="int" Nullable="false" />
+          <Property Name="EmployeeId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="OrderStatus" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="OrderTotal" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="OrderDate" Type="datetime" Nullable="false" />
+          <Property Name="ApprovalStatusId" Type="int" Nullable="false" />
+          <Property Name="ApprovalDate" Type="datetime" />
+          <Property Name="ApproverId" Type="int" />
+          <Property Name="CheckedBy" Type="varchar" MaxLength="128" />
+          <Property Name="AuthorizedBy" Type="varchar" MaxLength="128" />
+          <Property Name="InvoiceNo" Type="nvarchar" MaxLength="128" />
+          <Property Name="FileGUID" Type="uniqueidentifier" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="InvoiceFile" Type="varbinary(max)" />
+          <Property Name="Comments" Type="varchar" MaxLength="500" />
+          <Property Name="IsComplete" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RequisitionApprovers">
+          <Key>
+            <PropertyRef Name="ApproverId" />
+          </Key>
+          <Property Name="ApproverId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmployeeId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ApproverType" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Supplier">
+          <Key>
+            <PropertyRef Name="SupplierId" />
+          </Key>
+          <Property Name="SupplierId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SupplierTypeId" Type="int" Nullable="false" />
+          <Property Name="SupplierName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="SupplierAddress" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="SupplierPhoneNo" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="SupplierEmail" Type="varchar" MaxLength="200" />
+          <Property Name="SupplierContactPerson" Type="varchar" MaxLength="200" />
+          <Property Name="SupplierContactPersonPhoneNo" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="SupplierType">
+          <Key>
+            <PropertyRef Name="SupplierTypeId" />
+          </Key>
+          <Property Name="SupplierTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SupplierTypeDesc" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Cart_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CartProperties_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="CartProperties" Type="Self.CartProperties" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="CartProperties">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Department_Division">
+          <End Role="Division" Type="Self.Division" Multiplicity="1" />
+          <End Role="Department" Type="Self.Department" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Division">
+              <PropertyRef Name="DivisionId" />
+            </Principal>
+            <Dependent Role="Department">
+              <PropertyRef Name="DivisionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employee_Department">
+          <End Role="Department" Type="Self.Department" Multiplicity="1" />
+          <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="DepartmentId" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employee_EmployeeStatusType">
+          <End Role="EmployeeStatusType" Type="Self.EmployeeStatusType" Multiplicity="1" />
+          <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EmployeeStatusType">
+              <PropertyRef Name="EmployeeStatusId" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="EmployeeStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderLimitPerDept_Department">
+          <End Role="Department" Type="Self.Department" Multiplicity="1" />
+          <End Role="OrderLimitPerDept" Type="Self.OrderLimitPerDept" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="DepartmentId" />
+            </Principal>
+            <Dependent Role="OrderLimitPerDept">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_ProductCategory">
+          <End Role="ProductCategory" Type="Self.ProductCategory" Multiplicity="1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductCategory">
+              <PropertyRef Name="ProductCatId" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="ProductCatId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_Supplier">
+          <End Role="Supplier" Type="Self.Supplier" Multiplicity="1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Supplier">
+              <PropertyRef Name="SupplierId" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="SupplierId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Requisition_ApprovalStatusType">
+          <End Role="ApprovalStatusType" Type="Self.ApprovalStatusType" Multiplicity="1" />
+          <End Role="Requisition" Type="Self.Requisition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApprovalStatusType">
+              <PropertyRef Name="ApprovalStatusId" />
+            </Principal>
+            <Dependent Role="Requisition">
+              <PropertyRef Name="ApprovalStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Requisition_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="Requisition" Type="Self.Requisition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="Requisition">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Requisition_RequisitionApprovers">
+          <End Role="RequisitionApprovers" Type="Self.RequisitionApprovers" Multiplicity="0..1" />
+          <End Role="Requisition" Type="Self.Requisition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RequisitionApprovers">
+              <PropertyRef Name="ApproverId" />
+            </Principal>
+            <Dependent Role="Requisition">
+              <PropertyRef Name="ApproverId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RequisitionApprovers_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="RequisitionApprovers" Type="Self.RequisitionApprovers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="RequisitionApprovers">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Supplier_SupplierType">
+          <End Role="SupplierType" Type="Self.SupplierType" Multiplicity="1" />
+          <End Role="Supplier" Type="Self.Supplier" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SupplierType">
+              <PropertyRef Name="SupplierTypeId" />
+            </Principal>
+            <Dependent Role="Supplier">
+              <PropertyRef Name="SupplierTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="RASModelStoreContainer">
+          <EntitySet Name="ApprovalStatusType" EntityType="Self.ApprovalStatusType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cart" EntityType="Self.Cart" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CartProperties" EntityType="Self.CartProperties" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Division" EntityType="Self.Division" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmployeeStatusType" EntityType="Self.EmployeeStatusType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderDetails" EntityType="Self.OrderDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderLimitPerDept" EntityType="Self.OrderLimitPerDept" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProductCategory" EntityType="Self.ProductCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Requisition" EntityType="Self.Requisition" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RequisitionApprovers" EntityType="Self.RequisitionApprovers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Supplier" EntityType="Self.Supplier" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SupplierType" EntityType="Self.SupplierType" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Cart_Product" Association="Self.FK_Cart_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="Cart" EntitySet="Cart" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CartProperties_Employee" Association="Self.FK_CartProperties_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="CartProperties" EntitySet="CartProperties" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Department_Division" Association="Self.FK_Department_Division">
+            <End Role="Division" EntitySet="Division" />
+            <End Role="Department" EntitySet="Department" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employee_Department" Association="Self.FK_Employee_Department">
+            <End Role="Department" EntitySet="Department" />
+            <End Role="Employee" EntitySet="Employee" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employee_EmployeeStatusType" Association="Self.FK_Employee_EmployeeStatusType">
+            <End Role="EmployeeStatusType" EntitySet="EmployeeStatusType" />
+            <End Role="Employee" EntitySet="Employee" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderLimitPerDept_Department" Association="Self.FK_OrderLimitPerDept_Department">
+            <End Role="Department" EntitySet="Department" />
+            <End Role="OrderLimitPerDept" EntitySet="OrderLimitPerDept" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_ProductCategory" Association="Self.FK_Product_ProductCategory">
+            <End Role="ProductCategory" EntitySet="ProductCategory" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_Supplier" Association="Self.FK_Product_Supplier">
+            <End Role="Supplier" EntitySet="Supplier" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Requisition_ApprovalStatusType" Association="Self.FK_Requisition_ApprovalStatusType">
+            <End Role="ApprovalStatusType" EntitySet="ApprovalStatusType" />
+            <End Role="Requisition" EntitySet="Requisition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Requisition_Employee" Association="Self.FK_Requisition_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="Requisition" EntitySet="Requisition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Requisition_RequisitionApprovers" Association="Self.FK_Requisition_RequisitionApprovers">
+            <End Role="RequisitionApprovers" EntitySet="RequisitionApprovers" />
+            <End Role="Requisition" EntitySet="Requisition" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RequisitionApprovers_Employee" Association="Self.FK_RequisitionApprovers_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="RequisitionApprovers" EntitySet="RequisitionApprovers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Supplier_SupplierType" Association="Self.FK_Supplier_SupplierType">
+            <End Role="SupplierType" EntitySet="SupplierType" />
+            <End Role="Supplier" EntitySet="Supplier" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="RASModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ApprovalStatusType">
+          <Key>
+            <PropertyRef Name="ApprovalStatusId" />
+          </Key>
+          <Property Name="ApprovalStatusId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ApprovalStatus" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Requisitions" Relationship="Self.FK_Requisition_ApprovalStatusType" FromRole="ApprovalStatusType" ToRole="Requisition" />
+        </EntityType>
+        <EntityType Name="Cart">
+          <Key>
+            <PropertyRef Name="RecordId" />
+          </Key>
+          <Property Name="RecordId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CartId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ProductId" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="SubTotal" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="DateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Product" Relationship="Self.FK_Cart_Product" FromRole="Cart" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="CartProperty">
+          <Key>
+            <PropertyRef Name="CartId" />
+          </Key>
+          <Property Name="CartId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="EmployeeId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CartType" Type="String" MaxLength="8" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="GroupNum" Type="Int32" Nullable="false" />
+          <Property Name="IsComplete" Type="Boolean" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_CartProperties_Employee" FromRole="CartProperties" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="DepartmentId" />
+          </Key>
+          <Property Name="DepartmentId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DivisionId" Type="Int32" Nullable="false" />
+          <Property Name="DepartmentName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DepartmentAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Division" Relationship="Self.FK_Department_Division" FromRole="Department" ToRole="Division" />
+          <NavigationProperty Name="Employees" Relationship="Self.FK_Employee_Department" FromRole="Department" ToRole="Employee" />
+          <NavigationProperty Name="OrderLimitPerDept" Relationship="Self.FK_OrderLimitPerDept_Department" FromRole="Department" ToRole="OrderLimitPerDept" />
+        </EntityType>
+        <EntityType Name="Division">
+          <Key>
+            <PropertyRef Name="DivisionId" />
+          </Key>
+          <Property Name="DivisionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DivisionName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Departments" Relationship="Self.FK_Department_Division" FromRole="Division" ToRole="Department" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EmployeeId" />
+          </Key>
+          <Property Name="EmployeeId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="EmployeeFname" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EmployeeLname" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EmployeeStatusId" Type="Int32" Nullable="false" />
+          <Property Name="DepartmentId" Type="Int32" Nullable="false" />
+          <Property Name="EmpDateCreated" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="CartProperties" Relationship="Self.FK_CartProperties_Employee" FromRole="Employee" ToRole="CartProperties" />
+          <NavigationProperty Name="Department" Relationship="Self.FK_Employee_Department" FromRole="Employee" ToRole="Department" />
+          <NavigationProperty Name="EmployeeStatusType" Relationship="Self.FK_Employee_EmployeeStatusType" FromRole="Employee" ToRole="EmployeeStatusType" />
+          <NavigationProperty Name="Requisitions" Relationship="Self.FK_Requisition_Employee" FromRole="Employee" ToRole="Requisition" />
+          <NavigationProperty Name="RequisitionApprovers" Relationship="Self.FK_RequisitionApprovers_Employee" FromRole="Employee" ToRole="RequisitionApprovers" />
+        </EntityType>
+        <EntityType Name="EmployeeStatusType">
+          <Key>
+            <PropertyRef Name="EmployeeStatusId" />
+          </Key>
+          <Property Name="EmployeeStatusId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmployeeStatus" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Employees" Relationship="Self.FK_Employee_EmployeeStatusType" FromRole="EmployeeStatusType" ToRole="Employee" />
+        </EntityType>
+        <EntityType Name="OrderDetail">
+          <Key>
+            <PropertyRef Name="OrderDetailsNo" />
+          </Key>
+          <Property Name="OrderDetailsNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CartId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="GrandTotal" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="RequisitionNo" Type="Int32" Nullable="false" />
+          <Property Name="DocGUID" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuotationFile" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="OrderLimitPerDept">
+          <Key>
+            <PropertyRef Name="DepartmentId" />
+          </Key>
+          <Property Name="DepartmentId" Type="Int32" Nullable="false" />
+          <Property Name="Personnel" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="TotalFigures" Type="Int32" Nullable="false" />
+          <Property Name="FirstFigure" Type="Int32" Nullable="false" />
+          <Property Name="SecondFigure" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Department" Relationship="Self.FK_OrderLimitPerDept_Department" FromRole="OrderLimitPerDept" ToRole="Department" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="ProductId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductDesc" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ProductCatId" Type="Int32" Nullable="false" />
+          <Property Name="ProductPrice" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="SupplierId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Carts" Relationship="Self.FK_Cart_Product" FromRole="Product" ToRole="Cart" />
+          <NavigationProperty Name="ProductCategory" Relationship="Self.FK_Product_ProductCategory" FromRole="Product" ToRole="ProductCategory" />
+          <NavigationProperty Name="Supplier" Relationship="Self.FK_Product_Supplier" FromRole="Product" ToRole="Supplier" />
+        </EntityType>
+        <EntityType Name="ProductCategory">
+          <Key>
+            <PropertyRef Name="ProductCatId" />
+          </Key>
+          <Property Name="ProductCatId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductCatDesc" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Products" Relationship="Self.FK_Product_ProductCategory" FromRole="ProductCategory" ToRole="Product" />
+        </EntityType>
+        <EntityType Name="Requisition">
+          <Key>
+            <PropertyRef Name="RecordId" />
+          </Key>
+          <Property Name="RecordId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RequsitionNo" Type="Int32" Nullable="false" />
+          <Property Name="EmployeeId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="OrderStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="OrderTotal" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="OrderDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ApprovalStatusId" Type="Int32" Nullable="false" />
+          <Property Name="ApprovalDate" Type="DateTime" Precision="3" />
+          <Property Name="ApproverId" Type="Int32" />
+          <Property Name="CheckedBy" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="AuthorizedBy" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="InvoiceNo" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="FileGUID" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InvoiceFile" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="Comments" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="IsComplete" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="ApprovalStatusType" Relationship="Self.FK_Requisition_ApprovalStatusType" FromRole="Requisition" ToRole="ApprovalStatusType" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_Requisition_Employee" FromRole="Requisition" ToRole="Employee" />
+          <NavigationProperty Name="RequisitionApprover" Relationship="Self.FK_Requisition_RequisitionApprovers" FromRole="Requisition" ToRole="RequisitionApprovers" />
+        </EntityType>
+        <EntityType Name="RequisitionApprover">
+          <Key>
+            <PropertyRef Name="ApproverId" />
+          </Key>
+          <Property Name="ApproverId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmployeeId" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ApproverType" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Employee" Relationship="Self.FK_RequisitionApprovers_Employee" FromRole="RequisitionApprovers" ToRole="Employee" />
+          <NavigationProperty Name="Requisitions" Relationship="Self.FK_Requisition_RequisitionApprovers" FromRole="RequisitionApprovers" ToRole="Requisition" />
+        </EntityType>
+        <EntityType Name="Supplier">
+          <Key>
+            <PropertyRef Name="SupplierId" />
+          </Key>
+          <Property Name="SupplierId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SupplierTypeId" Type="Int32" Nullable="false" />
+          <Property Name="SupplierName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="SupplierAddress" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="SupplierPhoneNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="SupplierEmail" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="SupplierContactPerson" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="SupplierContactPersonPhoneNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Products" Relationship="Self.FK_Product_Supplier" FromRole="Supplier" ToRole="Product" />
+          <NavigationProperty Name="SupplierType" Relationship="Self.FK_Supplier_SupplierType" FromRole="Supplier" ToRole="SupplierType" />
+        </EntityType>
+        <EntityType Name="SupplierType">
+          <Key>
+            <PropertyRef Name="SupplierTypeId" />
+          </Key>
+          <Property Name="SupplierTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SupplierTypeDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Suppliers" Relationship="Self.FK_Supplier_SupplierType" FromRole="SupplierType" ToRole="Supplier" />
+        </EntityType>
+        <Association Name="FK_Requisition_ApprovalStatusType">
+          <End Role="ApprovalStatusType" Type="Self.ApprovalStatusType" Multiplicity="1" />
+          <End Role="Requisition" Type="Self.Requisition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApprovalStatusType">
+              <PropertyRef Name="ApprovalStatusId" />
+            </Principal>
+            <Dependent Role="Requisition">
+              <PropertyRef Name="ApprovalStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cart_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CartProperties_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="CartProperties" Type="Self.CartProperty" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="CartProperties">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Department_Division">
+          <End Role="Division" Type="Self.Division" Multiplicity="1" />
+          <End Role="Department" Type="Self.Department" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Division">
+              <PropertyRef Name="DivisionId" />
+            </Principal>
+            <Dependent Role="Department">
+              <PropertyRef Name="DivisionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employee_Department">
+          <End Role="Department" Type="Self.Department" Multiplicity="1" />
+          <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="DepartmentId" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrderLimitPerDept_Department">
+          <End Role="Department" Type="Self.Department" Multiplicity="1" />
+          <End Role="OrderLimitPerDept" Type="Self.OrderLimitPerDept" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Department">
+              <PropertyRef Name="DepartmentId" />
+            </Principal>
+            <Dependent Role="OrderLimitPerDept">
+              <PropertyRef Name="DepartmentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employee_EmployeeStatusType">
+          <End Role="EmployeeStatusType" Type="Self.EmployeeStatusType" Multiplicity="1" />
+          <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EmployeeStatusType">
+              <PropertyRef Name="EmployeeStatusId" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="EmployeeStatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Requisition_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="Requisition" Type="Self.Requisition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="Requisition">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RequisitionApprovers_Employee">
+          <End Role="Employee" Type="Self.Employee" Multiplicity="1" />
+          <End Role="RequisitionApprovers" Type="Self.RequisitionApprover" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeId" />
+            </Principal>
+            <Dependent Role="RequisitionApprovers">
+              <PropertyRef Name="EmployeeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_ProductCategory">
+          <End Role="ProductCategory" Type="Self.ProductCategory" Multiplicity="1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductCategory">
+              <PropertyRef Name="ProductCatId" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="ProductCatId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_Supplier">
+          <End Role="Supplier" Type="Self.Supplier" Multiplicity="1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Supplier">
+              <PropertyRef Name="SupplierId" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="SupplierId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Requisition_RequisitionApprovers">
+          <End Role="RequisitionApprovers" Type="Self.RequisitionApprover" Multiplicity="0..1" />
+          <End Role="Requisition" Type="Self.Requisition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RequisitionApprovers">
+              <PropertyRef Name="ApproverId" />
+            </Principal>
+            <Dependent Role="Requisition">
+              <PropertyRef Name="ApproverId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Supplier_SupplierType">
+          <End Role="SupplierType" Type="Self.SupplierType" Multiplicity="1" />
+          <End Role="Supplier" Type="Self.Supplier" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SupplierType">
+              <PropertyRef Name="SupplierTypeId" />
+            </Principal>
+            <Dependent Role="Supplier">
+              <PropertyRef Name="SupplierTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="RASEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ApprovalStatusTypes" EntityType="Self.ApprovalStatusType" />
+          <EntitySet Name="Carts" EntityType="Self.Cart" />
+          <EntitySet Name="CartProperties" EntityType="Self.CartProperty" />
+          <EntitySet Name="Departments" EntityType="Self.Department" />
+          <EntitySet Name="Divisions" EntityType="Self.Division" />
+          <EntitySet Name="Employees" EntityType="Self.Employee" />
+          <EntitySet Name="EmployeeStatusTypes" EntityType="Self.EmployeeStatusType" />
+          <EntitySet Name="OrderDetails" EntityType="Self.OrderDetail" />
+          <EntitySet Name="OrderLimitPerDepts" EntityType="Self.OrderLimitPerDept" />
+          <EntitySet Name="Products" EntityType="Self.Product" />
+          <EntitySet Name="ProductCategories" EntityType="Self.ProductCategory" />
+          <EntitySet Name="Requisitions" EntityType="Self.Requisition" />
+          <EntitySet Name="RequisitionApprovers" EntityType="Self.RequisitionApprover" />
+          <EntitySet Name="Suppliers" EntityType="Self.Supplier" />
+          <EntitySet Name="SupplierTypes" EntityType="Self.SupplierType" />
+          <AssociationSet Name="FK_Requisition_ApprovalStatusType" Association="Self.FK_Requisition_ApprovalStatusType">
+            <End Role="ApprovalStatusType" EntitySet="ApprovalStatusTypes" />
+            <End Role="Requisition" EntitySet="Requisitions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cart_Product" Association="Self.FK_Cart_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="Cart" EntitySet="Carts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CartProperties_Employee" Association="Self.FK_CartProperties_Employee">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="CartProperties" EntitySet="CartProperties" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Department_Division" Association="Self.FK_Department_Division">
+            <End Role="Division" EntitySet="Divisions" />
+            <End Role="Department" EntitySet="Departments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employee_Department" Association="Self.FK_Employee_Department">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="Employee" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrderLimitPerDept_Department" Association="Self.FK_OrderLimitPerDept_Department">
+            <End Role="Department" EntitySet="Departments" />
+            <End Role="OrderLimitPerDept" EntitySet="OrderLimitPerDepts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employee_EmployeeStatusType" Association="Self.FK_Employee_EmployeeStatusType">
+            <End Role="EmployeeStatusType" EntitySet="EmployeeStatusTypes" />
+            <End Role="Employee" EntitySet="Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Requisition_Employee" Association="Self.FK_Requisition_Employee">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="Requisition" EntitySet="Requisitions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RequisitionApprovers_Employee" Association="Self.FK_RequisitionApprovers_Employee">
+            <End Role="Employee" EntitySet="Employees" />
+            <End Role="RequisitionApprovers" EntitySet="RequisitionApprovers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_ProductCategory" Association="Self.FK_Product_ProductCategory">
+            <End Role="ProductCategory" EntitySet="ProductCategories" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_Supplier" Association="Self.FK_Product_Supplier">
+            <End Role="Supplier" EntitySet="Suppliers" />
+            <End Role="Product" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Requisition_RequisitionApprovers" Association="Self.FK_Requisition_RequisitionApprovers">
+            <End Role="RequisitionApprovers" EntitySet="RequisitionApprovers" />
+            <End Role="Requisition" EntitySet="Requisitions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Supplier_SupplierType" Association="Self.FK_Supplier_SupplierType">
+            <End Role="SupplierType" EntitySet="SupplierTypes" />
+            <End Role="Supplier" EntitySet="Suppliers" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="RASModelStoreContainer" CdmEntityContainer="RASEntities">
+          <EntitySetMapping Name="ApprovalStatusTypes">
+            <EntityTypeMapping TypeName="RASModel.ApprovalStatusType">
+              <MappingFragment StoreEntitySet="ApprovalStatusType">
+                <ScalarProperty Name="ApprovalStatusId" ColumnName="ApprovalStatusId" />
+                <ScalarProperty Name="ApprovalStatus" ColumnName="ApprovalStatus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Carts">
+            <EntityTypeMapping TypeName="RASModel.Cart">
+              <MappingFragment StoreEntitySet="Cart">
+                <ScalarProperty Name="RecordId" ColumnName="RecordId" />
+                <ScalarProperty Name="CartId" ColumnName="CartId" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="SubTotal" ColumnName="SubTotal" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CartProperties">
+            <EntityTypeMapping TypeName="RASModel.CartProperty">
+              <MappingFragment StoreEntitySet="CartProperties">
+                <ScalarProperty Name="CartId" ColumnName="CartId" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="CartType" ColumnName="CartType" />
+                <ScalarProperty Name="GroupNum" ColumnName="GroupNum" />
+                <ScalarProperty Name="IsComplete" ColumnName="IsComplete" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Departments">
+            <EntityTypeMapping TypeName="RASModel.Department">
+              <MappingFragment StoreEntitySet="Department">
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="DivisionId" ColumnName="DivisionId" />
+                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+                <ScalarProperty Name="DepartmentAddress" ColumnName="DepartmentAddress" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Divisions">
+            <EntityTypeMapping TypeName="RASModel.Division">
+              <MappingFragment StoreEntitySet="Division">
+                <ScalarProperty Name="DivisionId" ColumnName="DivisionId" />
+                <ScalarProperty Name="DivisionName" ColumnName="DivisionName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employees">
+            <EntityTypeMapping TypeName="RASModel.Employee">
+              <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="EmployeeFname" ColumnName="EmployeeFname" />
+                <ScalarProperty Name="EmployeeLname" ColumnName="EmployeeLname" />
+                <ScalarProperty Name="EmployeeStatusId" ColumnName="EmployeeStatusId" />
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="EmpDateCreated" ColumnName="EmpDateCreated" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmployeeStatusTypes">
+            <EntityTypeMapping TypeName="RASModel.EmployeeStatusType">
+              <MappingFragment StoreEntitySet="EmployeeStatusType">
+                <ScalarProperty Name="EmployeeStatusId" ColumnName="EmployeeStatusId" />
+                <ScalarProperty Name="EmployeeStatus" ColumnName="EmployeeStatus" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderDetails">
+            <EntityTypeMapping TypeName="RASModel.OrderDetail">
+              <MappingFragment StoreEntitySet="OrderDetails">
+                <ScalarProperty Name="OrderDetailsNo" ColumnName="OrderDetailsNo" />
+                <ScalarProperty Name="CartId" ColumnName="CartId" />
+                <ScalarProperty Name="GrandTotal" ColumnName="GrandTotal" />
+                <ScalarProperty Name="RequisitionNo" ColumnName="RequisitionNo" />
+                <ScalarProperty Name="DocGUID" ColumnName="DocGUID" />
+                <ScalarProperty Name="QuotationFile" ColumnName="QuotationFile" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderLimitPerDepts">
+            <EntityTypeMapping TypeName="RASModel.OrderLimitPerDept">
+              <MappingFragment StoreEntitySet="OrderLimitPerDept">
+                <ScalarProperty Name="DepartmentId" ColumnName="DepartmentId" />
+                <ScalarProperty Name="Personnel" ColumnName="Personnel" />
+                <ScalarProperty Name="TotalFigures" ColumnName="TotalFigures" />
+                <ScalarProperty Name="FirstFigure" ColumnName="FirstFigure" />
+                <ScalarProperty Name="SecondFigure" ColumnName="SecondFigure" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="RASModel.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="ProductDesc" ColumnName="ProductDesc" />
+                <ScalarProperty Name="ProductCatId" ColumnName="ProductCatId" />
+                <ScalarProperty Name="ProductPrice" ColumnName="ProductPrice" />
+                <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProductCategories">
+            <EntityTypeMapping TypeName="RASModel.ProductCategory">
+              <MappingFragment StoreEntitySet="ProductCategory">
+                <ScalarProperty Name="ProductCatId" ColumnName="ProductCatId" />
+                <ScalarProperty Name="ProductCatDesc" ColumnName="ProductCatDesc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Requisitions">
+            <EntityTypeMapping TypeName="RASModel.Requisition">
+              <MappingFragment StoreEntitySet="Requisition">
+                <ScalarProperty Name="RecordId" ColumnName="RecordId" />
+                <ScalarProperty Name="RequsitionNo" ColumnName="RequsitionNo" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="OrderStatus" ColumnName="OrderStatus" />
+                <ScalarProperty Name="OrderTotal" ColumnName="OrderTotal" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="ApprovalStatusId" ColumnName="ApprovalStatusId" />
+                <ScalarProperty Name="ApprovalDate" ColumnName="ApprovalDate" />
+                <ScalarProperty Name="ApproverId" ColumnName="ApproverId" />
+                <ScalarProperty Name="CheckedBy" ColumnName="CheckedBy" />
+                <ScalarProperty Name="AuthorizedBy" ColumnName="AuthorizedBy" />
+                <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+                <ScalarProperty Name="FileGUID" ColumnName="FileGUID" />
+                <ScalarProperty Name="InvoiceFile" ColumnName="InvoiceFile" />
+                <ScalarProperty Name="Comments" ColumnName="Comments" />
+                <ScalarProperty Name="IsComplete" ColumnName="IsComplete" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RequisitionApprovers">
+            <EntityTypeMapping TypeName="RASModel.RequisitionApprover">
+              <MappingFragment StoreEntitySet="RequisitionApprovers">
+                <ScalarProperty Name="ApproverId" ColumnName="ApproverId" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="ApproverType" ColumnName="ApproverType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Suppliers">
+            <EntityTypeMapping TypeName="RASModel.Supplier">
+              <MappingFragment StoreEntitySet="Supplier">
+                <ScalarProperty Name="SupplierId" ColumnName="SupplierId" />
+                <ScalarProperty Name="SupplierTypeId" ColumnName="SupplierTypeId" />
+                <ScalarProperty Name="SupplierName" ColumnName="SupplierName" />
+                <ScalarProperty Name="SupplierAddress" ColumnName="SupplierAddress" />
+                <ScalarProperty Name="SupplierPhoneNo" ColumnName="SupplierPhoneNo" />
+                <ScalarProperty Name="SupplierEmail" ColumnName="SupplierEmail" />
+                <ScalarProperty Name="SupplierContactPerson" ColumnName="SupplierContactPerson" />
+                <ScalarProperty Name="SupplierContactPersonPhoneNo" ColumnName="SupplierContactPersonPhoneNo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SupplierTypes">
+            <EntityTypeMapping TypeName="RASModel.SupplierType">
+              <MappingFragment StoreEntitySet="SupplierType">
+                <ScalarProperty Name="SupplierTypeId" ColumnName="SupplierTypeId" />
+                <ScalarProperty Name="SupplierTypeDesc" ColumnName="SupplierTypeDesc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,108 @@
+﻿@model OrderCreationForm.ViewModels.ItemViewModel
+@{
+    ViewBag.Title = "New Order";
+}
+
+<script src="~/Scripts/bootstrap.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script src="~/Scripts/jquery-3.1.1.min.js" async="async"></script>
+<script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function ()
+    {
+        //alert("jQuery Executed");
+        $.ajaxPrefilter(function (options, original_Options, jqXHR) {
+            options.async = true;
+        });
+
+        //alert("jquery triggered");
+        $("#supplier_type_id").change(function (e) {
+            //alert("Supplier type id triggered");
+            e.preventDefault();
+            var selectedItem = $(this).val();
+            //alert("Selected Supplier Type ID: " + selectedItem);
+            var ddlSuppliers = $("#supplier_id");
+            var suppliersProgress = $("#suppliers-loading-progress");
+            suppliersProgress.show();
+            $.ajax({
+                cache: false,
+                type: "GET",
+                url: "@(Url.RouteUrl("GetSuppliersBySupplierTypeId"))",
+                data: { "supplier_type_id": selectedItem },
+                    success: function (data)
+                    {
+                        ddlSuppliers.html('');
+                        $.each(data, function (id, option)
+                        {
+                            ddlSuppliers.append($('<option></option>').val(option.id).html(option.name));
+                        });
+                        suppliersProgress.hide();
+                    },
+                    error: function (xhr, ajaxOptions, thrownError)
+                    {
+                        alert('Failed to retrieve suppliers.');
+                        suppliersProgress.hide();
+                    }
+            });//End of AJAX Function
+        });//End of Supplier Type
+
+        $("#supplier_id").change(function (e) {
+            e.preventDefault();
+            var $searchSection = $('<form class="form-inline"><input type="text" id="txtbox" class="form-control"/>' + '&nbsp&nbsp&nbsp&nbsp&nbsp' + '<button id="search" class="btn btn-primary"><span class="glyphicon glyphicon-search"></span> Search</button></form>');
+            $('#filtersection').replaceWith($searchSection)
+
+            $("#productpartialview").load('@(Url.Action("GetProductsBySupplierId", "Items",null, Request.Url.Scheme))?supplierId=' + $('#supplier_id').val());
+
+            $('#search').unbind().click(function (e) {
+                e.preventDefault();
+                $("#productpartialview").load('@(Url.Action("SearchProducts", "Items",null, Request.Url.Scheme))?supplierId=' + $('#supplier_id').val() + '&searchString=' + $('#txtbox').val());
+            });
+        });//End of Supplier
+
+    });
+</script>
+
+<h3>Create Order</h3>
+@using (Html.BeginForm())
+{
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title"><span class="glyphicon glyphicon-plus-sign"></span> New Order</h3>
+        </div>
+        @*<a href="~/Views/Items/_SupplierDetail.cshtml">~/Views/Items/_SupplierDetail.cshtml</a>*@
+        <div class="panel-body">
+            <div style="margin-top:17px;">
+                @Html.AntiForgeryToken()
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @*<div class="form-group">
+                @Html.LabelFor(model => model.order_status_id, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(model => model.order_status_id, Model.AvailableOrderStatuses, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div>*@                 
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.supplier_type_id, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.supplier_type_id, Model.AvailableSupplierTypes, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.supplier_id, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.supplier_id, Model.AvailableSuppliers, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+                </div>
+                <div id="filtersection"></div>
+                <div id="productpartialview">
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+

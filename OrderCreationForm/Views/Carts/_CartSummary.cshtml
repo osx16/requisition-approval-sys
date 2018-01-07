@@ -1,0 +1,86 @@
+﻿@model PagedList.IPagedList<OrderCreationForm.Models.Cart>
+@using PagedList.Mvc;
+<script src="~/Scripts/jquery-3.1.1.min.js"></script>
+<script src="~/Scripts/bootstrap.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<div class="well">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title"><b>Cart</b> <span class="badge"><b>@ViewBag.GroupNo</b></span> </h3>
+            <p><b>Date Created:</b> @ViewBag.DateCreated</p>
+            <p><b>Supplier:</b> @ViewBag.Supplier</p>
+            @*<p><b>CartId: </b>@ViewBag.CartId</p>*@
+        </div>
+        <div class="panel-body">
+            <div style="margin-top:17px;">
+                <table class="table">
+                    <thead>
+                        <tr class="success">
+                            <th>
+                                ID
+                            </th>
+                            <th>
+                                Description
+                            </th>
+                            <th>
+                                Unit Price
+                            </th>
+                            <th>
+                                Quantity
+                            </th>
+                            <th>
+                                Subtotal
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Count() == 0)
+                        {
+                            <tr>
+                                <td colspan="7">No results Found</td>
+                            </tr>
+                        }
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ProductId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Product.ProductDesc)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Product.ProductPrice)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Quantity)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.SubTotal)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <br />
+                <div id='Paging' style="text-align: center">
+                    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)
+                    of @Model.PageCount
+                    @Html.PagedListPager(Model, page => Url.Action("GetAllCartItems",
+                        new { cartId = ViewBag.CartId, page }),
+                        PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "cart" + @ViewBag.GroupNo }))
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-body"><span class="label label-info" style="font-size:medium">Total: </span><b>@String.Format("{0:C}", @ViewBag.CartTotal)</b></div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                    <span class="glyphicon glyphicon-eye-open" style="font-size:medium"></span>
+                        @Html.ActionLink("View Quote", "DownloadFile", new { id = ViewBag.OrderDetailsNo }, new {target="_blank"})
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
